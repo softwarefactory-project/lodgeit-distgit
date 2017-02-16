@@ -1,0 +1,14 @@
+[Unit]
+Description=Run LodgeIt.
+After=syslog.target network.target mariadb.service
+
+[Service]
+Type=simple
+User=lodgeit
+EnvironmentFile=-/etc/sysconfig/lodgeit
+ExecStartPre=/usr/bin/wait4service $LODGEIT_SQL_SERVER
+ExecStart=/usr/bin/lodgeit runserver
+ExecStartPost=/usr/bin/wait4service localhost 5000
+
+[Install]
+WantedBy=multi-user.target
