@@ -56,7 +56,7 @@ install -p -D -m 0644 %{SOURCE6} %{buildroot}%{_sysconfdir}/sysconfig/lodgeit
 install -p -d -m 0700 %{buildroot}%{_sharedstatedir}/lodgeit
 
 %pre
-getent group lodgeit >/dev/null || groupadd -r lodgeit --gid 162
+getent group lodgeit >/dev/null || groupadd -r lodgeit
 if ! getent passwd lodgeit >/dev/null; then
   useradd -r -g lodgeit -G lodgeit -d %{_sharedstatedir}/lodgeit -s /sbin/nologin -c "Lodgeit Daemons" lodgeit
 fi
