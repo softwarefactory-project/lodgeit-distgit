@@ -2,7 +2,7 @@
 
 Name:           lodgeit
 Version:        0.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        LogdeIt, a Pastebin service
 
 License:        BSD
@@ -33,16 +33,20 @@ BuildRequires:  python-pbr
 BuildRequires:  python-setuptools
 BuildRequires:  systemd
 
+
 %description
 Lodgeit is a simple pastebin service.
+
 
 %prep
 %autosetup -n %{name}-%{commit}
 rm requirements.txt test-requirements.txt
 
+
 %build
 cp %{SOURCE1} %{SOURCE2} .
 PBR_VERSION=%{version} %{__python2} setup.py build
+
 
 %install
 PBR_VERSION=%{version} %{__python2} setup.py install --skip-build --root %{buildroot}
@@ -55,21 +59,26 @@ install -p -D -m 0640 %{SOURCE5} %{buildroot}%{_sysconfdir}/lodgeit/lodgeit.conf
 install -p -D -m 0644 %{SOURCE6} %{buildroot}%{_sysconfdir}/sysconfig/lodgeit
 install -p -d -m 0700 %{buildroot}%{_sharedstatedir}/lodgeit
 
+
 %pre
 getent group lodgeit >/dev/null || groupadd -r lodgeit
 if ! getent passwd lodgeit >/dev/null; then
-  useradd -r -g lodgeit -G lodgeit -d %{_sharedstatedir}/lodgeit -s /sbin/nologin -c "Lodgeit Daemons" lodgeit
+  useradd -r -g lodgeit -G lodgeit -d %{_sharedstatedir}/lodgeit -s /sbin/nologin -c "Lodgeit Daemon" lodgeit
 fi
 exit 0
+
 
 %post
 %systemd_post lodgeit.service
 
+
 %preun
 %systemd_preun lodgeit.service
 
+
 %postun
 %systemd_postun_with_restart lodgeit.service
+
 
 %files
 %{_bindir}/lodgeit
@@ -81,6 +90,10 @@ exit 0
 %{python2_sitelib}/lodgeit
 %{python2_sitelib}/lodgeit-*.egg-info
 
+
 %changelog
+* Mon Feb 20 2017 Tristan Cacqueray - 0.1-2
+- Fix typo
+
 * Thu Feb 16 2017 Tristan Cacqueray - 0.1-1
 - Initial packaging
