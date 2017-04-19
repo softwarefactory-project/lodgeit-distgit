@@ -2,7 +2,7 @@
 
 Name:           lodgeit
 Version:        0.1
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        LogdeIt, a Pastebin service
 
 License:        BSD
@@ -27,7 +27,7 @@ Requires:       python-pillow
 Requires:       pytz
 Requires:       python-markupsafe
 Requires:       wait4service
-Requires:       js-jquery1
+Requires:       python-XStatic-jQuery
 
 BuildRequires:  python2-devel
 BuildRequires:  python-pbr
@@ -45,7 +45,7 @@ rm requirements.txt test-requirements.txt
 
 # Replace bundled libraries
 rm lodgeit/static/jquery.js
-ln -s /usr/share/web-assets/jquery/1/jquery.min.js lodgeit/static/jquery.js
+ln -s /usr/lib/python2.7/site-packages/xstatic/pkg/jquery/data/jquery.min.js lodgeit/static/jquery.js
 
 # Remove unused/not maintained autocomplete plugin
 rm lodgeit/static/jquery.autocomplete.js
@@ -101,6 +101,9 @@ exit 0
 
 
 %changelog
+* Wed Apr 19 2017 Tristan Cacqueray <tdecacqu@redhat.com> - 0.1-3
+- use python-XStatic-jQuery instead of js-jquery1
+
 * Mon Feb 20 2017 Tristan Cacqueray - 0.1-2
 - Fix typo
 
