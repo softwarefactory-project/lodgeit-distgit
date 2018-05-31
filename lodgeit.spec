@@ -1,8 +1,8 @@
-%global commit  62f95b0b1b2f1e50cb8422b3dd7bd2365b3453cf
+%global commit  af3168e44945f253001f9eed7525d8cfd9bd532b
 
 Name:           lodgeit
-Version:        0.1
-Release:        3%{?dist}
+Version:        0.2
+Release:        1%{?dist}
 Summary:        LogdeIt, a Pastebin service
 
 License:        BSD
@@ -14,6 +14,8 @@ Source3:        lodgeit.py
 Source4:        lodgeit.service
 Source5:        lodgeit.conf
 Source6:        lodgeit.sysconfig
+
+Patch1:         0001-Add-sub-url-deployment-fixes-and-top-menu.patch
 
 BuildArch:      noarch
 
@@ -40,7 +42,7 @@ Lodgeit is a simple pastebin service.
 
 
 %prep
-%autosetup -n %{name}-%{commit}
+%autosetup -n %{name}-%{commit} -p1
 rm requirements.txt test-requirements.txt
 
 # Replace bundled libraries
@@ -101,6 +103,10 @@ exit 0
 
 
 %changelog
+* Thu May 31 2018 Tristan Cacqueray <tdecacqu@redhat.com> - 0.2-1
+- Bump version and include sub-url patch
+
+
 * Wed Apr 19 2017 Tristan Cacqueray <tdecacqu@redhat.com> - 0.1-3
 - use python-XStatic-jQuery instead of js-jquery1
 
