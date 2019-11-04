@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 
-from werkzeug import script, create_environ, run_wsgi_app
+from werkzeug import create_environ, run_wsgi_app
 
+from lodgeit import script
 from lodgeit import local
 from lodgeit.application import make_app
 from lodgeit.database import db

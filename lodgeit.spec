@@ -2,18 +2,19 @@
 
 Name:           lodgeit
 Version:        0.2
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        LogdeIt, a Pastebin service
 
 License:        BSD
-URL:            https://github.com/openstack-infra/lodgeit
-Source0:        https://github.com/openstack-infra/lodgeit/archive/%{commit}.tar.gz
+URL:            https://opendev.org/opendev/lodgeit
+Source0:        https://opendev.org/opendev/lodgeit/archive/%{commit}.tar.gz
 Source1:        setup.py
 Source2:        setup.cfg
 Source3:        lodgeit.py
 Source4:        lodgeit.service
 Source5:        lodgeit.conf
 Source6:        lodgeit.sysconfig
+Source7:        werkzeug-script.py
 
 Patch1:         0001-Add-sub-url-deployment-fixes-and-top-menu.patch
 
@@ -42,7 +43,7 @@ Lodgeit is a simple pastebin service.
 
 
 %prep
-%autosetup -n %{name}-%{commit} -p1
+%autosetup -n %{name} -p1
 rm requirements.txt test-requirements.txt
 
 # Replace bundled libraries
@@ -52,6 +53,7 @@ ln -s /usr/lib/python2.7/site-packages/xstatic/pkg/jquery/data/jquery.min.js lod
 # Remove unused/not maintained autocomplete plugin
 rm lodgeit/static/jquery.autocomplete.js
 sed -i 's|^<script.*jquery.autocomplete.js.*$||' lodgeit/views/layout.html
+cp %{SOURCE7} lodgeit/script.py
 
 
 %build
@@ -103,6 +105,9 @@ exit 0
 
 
 %changelog
+* Mon Nov  4 2019 Tristan Cacqueray <tdecacqu@redhat.com> - 0.2-2
+- Add werkzeug.script module
+
 * Thu May 31 2018 Tristan Cacqueray <tdecacqu@redhat.com> - 0.2-1
 - Bump version and include sub-url patch
 
