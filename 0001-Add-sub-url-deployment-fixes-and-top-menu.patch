@@ -1,4 +1,4 @@
-From c37cd4dfe270d3951d6964c964261be8a415f272 Mon Sep 17 00:00:00 2001
+From 67f2688f7824f79a349cf5b8a2c79e6eeb178982 Mon Sep 17 00:00:00 2001
 From: Tristan Cacqueray <tdecacqu@redhat.com>
 Date: Wed, 30 May 2018 23:59:47 +0000
 Subject: [PATCH] Add sub-url deployment fixes and top-menu
@@ -7,9 +7,9 @@ Subject: [PATCH] Add sub-url deployment fixes and top-menu
  lodgeit/urls.py                  | 32 ++++++++++++++++----------------
  lodgeit/views/help/advanced.html |  6 +++---
  lodgeit/views/help/pasting.html  |  4 ++--
- lodgeit/views/layout.html        | 15 ++++++++-------
+ lodgeit/views/layout.html        | 14 +++++++-------
  lodgeit/views/new_paste.html     |  2 +-
- 5 files changed, 30 insertions(+), 29 deletions(-)
+ 5 files changed, 29 insertions(+), 29 deletions(-)
 
 diff --git a/lodgeit/urls.py b/lodgeit/urls.py
 index ee95dda..d7148ba 100644
@@ -115,10 +115,10 @@ index 404b96a..832de78 100644
      A new editor window will open with the contents of the old paste. Just
      do your changes and click "paste" to submit them.{% endtrans %}
 diff --git a/lodgeit/views/layout.html b/lodgeit/views/layout.html
-index dfecbed..99ef5a5 100644
+index dfecbed..55b4f5d 100644
 --- a/lodgeit/views/layout.html
 +++ b/lodgeit/views/layout.html
-@@ -3,12 +3,13 @@
+@@ -3,12 +3,12 @@
  <html>
    <head>
      <title>{{ page_title|e }} | LodgeIt!</title>
@@ -134,11 +134,10 @@ index dfecbed..99ef5a5 100644
 +    <script type="text/javascript" src="/static/lodgeit/jquery.autocomplete.js"></script>
 +    <script type="text/javascript" src="/static/lodgeit/cookie.js"></script>
 +    <script type="text/javascript" src="/static/lodgeit/lodgeit.js"></script>
-+    <script type="text/javascript" src="/static/js/topmenu.js"></script>
      {%- if css %}
      <style type="text/css">
        {{ css|e }}
-@@ -35,7 +36,7 @@
+@@ -35,7 +35,7 @@
        {% for lang, name in i18n_languages %}
          <li {% if request.locale.language == lang %}class="active"{% endif %}>
            <a href="{{ url_for('pastes/new_paste', language='%s' % lang) }}">
@@ -161,5 +160,5 @@ index 2a44ef4..80fd1a1 100644
          </div>
          {%- else %}
 -- 
-2.16.1
+2.29.2
 
