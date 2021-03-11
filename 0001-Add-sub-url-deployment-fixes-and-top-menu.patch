@@ -134,7 +134,6 @@ index dfecbed..99ef5a5 100644
 +    <script type="text/javascript" src="/static/lodgeit/jquery.autocomplete.js"></script>
 +    <script type="text/javascript" src="/static/lodgeit/cookie.js"></script>
 +    <script type="text/javascript" src="/static/lodgeit/lodgeit.js"></script>
-+    <script type="text/javascript" src="/static/js/topmenu.js"></script>
      {%- if css %}
      <style type="text/css">
        {{ css|e }}
