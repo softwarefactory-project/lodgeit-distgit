@@ -1,0 +1,71 @@
+From 7eb34a9d4f4c50af3d41147c0a075b84c087e921 Mon Sep 17 00:00:00 2001
+From: Daniel Pawlik <dpawlik@redhat.com>
+Date: Fri, 23 Apr 2021 15:06:57 +0200
+Subject: [PATCH] Fix issue related to new Pillow lib; change hash string
+ encode
+
+The captcha system may raise an error, when calculations were
+float; added box argument for calling Pillow paste method.
+This commit is also changing string encode in calculate_hash
+function due "TypeError" exception.
+
+Change-Id: Ibe175b78a8c446a7552c82732ec0ae25ef47c536
+---
+ lodgeit/lib/captcha.py | 17 ++++++++---------
+ 1 file changed, 8 insertions(+), 9 deletions(-)
+
+diff --git a/lodgeit/lib/captcha.py b/lodgeit/lib/captcha.py
+index 76c683f..85df593 100644
+--- a/lodgeit/lib/captcha.py
++++ b/lodgeit/lib/captcha.py
+@@ -46,10 +46,8 @@ def calculate_hash(solution, secret_key=None):
+     """Calculate the hash."""
+     if secret_key is None:
+         secret_key = local.application.secret_key
+-    return sha1('%s|%s' % (
+-        secret_key,
+-        solution.encode('utf-8')
+-    )).hexdigest()
++    c_hash = '%s|%s' % (secret_key, solution)
++    return sha1(c_hash.encode('utf-8')).hexdigest()
+ 
+ 
+ def generate_word():
+@@ -284,11 +282,11 @@ class GridBackground(Layer):
+ 
+     def render(self, image):
+         draw = ImageDraw.Draw(image)
+-        for i in xrange(image.size[0] / self.size + 1):
++        for i in xrange(int(image.size[0] / self.size + 1)):
+             draw.line((i * self.size + self.offset[0], 0,
+                        i * self.size + self.offset[0], image.size[1]),
+                       fill=self.color)
+-        for i in xrange(image.size[0] / self.size + 1):
++        for i in xrange(int(image.size[0] / self.size + 1)):
+             draw.line((0, i * self.size + self.offset[1],
+                        image.size[0], i * self.size+self.offset[1]),
+                       fill=self.color)
+@@ -308,7 +306,8 @@ class SolidColor(Layer):
+             self.bg = 'light'
+ 
+     def render(self, image):
+-        image.paste(self.color)
++        box = (100, 100, 300, 300)
++        image.paste(self.color, box)
+         return image
+ 
+ 
+@@ -362,8 +361,8 @@ class WarpBase(Layer):
+ 
+     def render(self, image):
+         r = self.resolution
+-        x_points = image.size[0] / r + 2
+-        y_points = image.size[1] / r + 2
++        x_points = int(image.size[0] / r + 2)
++        y_points = int(image.size[1] / r + 2)
+         f = self.get_transform(image)
+ 
+         # Create a list of arrays with transformed points
+-- 
+2.31.1
+

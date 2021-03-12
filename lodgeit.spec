@@ -1,8 +1,8 @@
-%global commit  af3168e44945f253001f9eed7525d8cfd9bd532b
+%global commit  c6c6db6ca06a4edcafa1f425d0d36e16264cfd51
 
 Name:           lodgeit
-Version:        0.2
-Release:        2%{?dist}
+Version:        0.3
+Release:        1%{?dist}
 Summary:        LogdeIt, a Pastebin service
 
 License:        BSD
@@ -16,25 +16,28 @@ Source5:        lodgeit.conf
 Source6:        lodgeit.sysconfig
 Source7:        werkzeug-script.py
 
-Patch1:         0001-Add-sub-url-deployment-fixes-and-top-menu.patch
+Patch1:         0001-Add-sub-url-deployment-fixes.patch
+Patch2:         0001-Fix-secret-encoding-issue-to-building-the-cookie.patch
+Patch3:         0001-Fix-issue-related-to-new-Pillow-lib-change-hash-stri.patch
 
 BuildArch:      noarch
 
-Requires:       python-jinja2
-Requires:       python-werkzeug
-Requires:       python-pygments
-Requires:       python-sqlalchemy
-Requires:       python-simplejson
-Requires:       python-babel
-Requires:       python-pillow
+Requires:       python3-jinja2
+Requires:       python3-werkzeug
+Requires:       python3-pygments
+Requires:       python3-sqlalchemy
+Requires:       python3-simplejson
+Requires:       python3-babel
+Requires:       python3-pillow
+Requires:       python3-PyMySQL
 Requires:       pytz
-Requires:       python-markupsafe
+Requires:       python3-markupsafe
 Requires:       wait4service
-Requires:       python-XStatic-jQuery
+Requires:       python3-XStatic-jQuery
 
-BuildRequires:  python2-devel
-BuildRequires:  python-pbr
-BuildRequires:  python-setuptools
+BuildRequires:  python3-devel
+BuildRequires:  python3-pbr
+BuildRequires:  python3-setuptools
 BuildRequires:  systemd
 
 
@@ -48,7 +51,7 @@ rm requirements.txt test-requirements.txt
 
 # Replace bundled libraries
 rm lodgeit/static/jquery.js
-ln -s /usr/lib/python2.7/site-packages/xstatic/pkg/jquery/data/jquery.min.js lodgeit/static/jquery.js
+ln -s /usr/lib/python3.6/site-packages/xstatic/pkg/jquery/data/jquery.min.js lodgeit/static/jquery.js
 
 # Remove unused/not maintained autocomplete plugin
 rm lodgeit/static/jquery.autocomplete.js
@@ -58,13 +61,13 @@ cp %{SOURCE7} lodgeit/script.py
 
 %build
 cp %{SOURCE1} %{SOURCE2} .
-PBR_VERSION=%{version} %{__python2} setup.py build
+PBR_VERSION=%{version} %{__python3} setup.py build
 
 
 %install
-PBR_VERSION=%{version} %{__python2} setup.py install --skip-build --root %{buildroot}
+PBR_VERSION=%{version} %{__python3} setup.py install --skip-build --root %{buildroot}
 # TODO: use setup.cfg data_files
-mv lodgeit/{res,static,views} %{buildroot}/%{python2_sitelib}/lodgeit/
+mv lodgeit/{res,static,views} %{buildroot}/%{python3_sitelib}/lodgeit/
 
 install -p -D -m 0755 %{SOURCE3} %{buildroot}/usr/bin/lodgeit
 install -p -D -m 0644 %{SOURCE4} %{buildroot}%{_unitdir}/lodgeit.service
@@ -100,11 +103,15 @@ exit 0
 %config(noreplace) %attr(0640, root, lodgeit) %{_sysconfdir}/lodgeit/lodgeit.conf
 %dir %attr(0700, lodgeit, lodgeit) %{_sharedstatedir}/lodgeit
 %{_sysconfdir}/sysconfig/lodgeit
-%{python2_sitelib}/lodgeit
-%{python2_sitelib}/lodgeit-*.egg-info
+%{python3_sitelib}/lodgeit
+%{python3_sitelib}/lodgeit-*.egg-info
 
 
 %changelog
+* Fri Mar 12 2021 Fabien Boucher <fboucher@redhat.com> - 0.3-1
+- Bump to last master and remove SF topmenu
+- Fix encoding issue when creating the cookie
+
 * Mon Nov  4 2019 Tristan Cacqueray <tdecacqu@redhat.com> - 0.2-2
 - Add werkzeug.script module
 
