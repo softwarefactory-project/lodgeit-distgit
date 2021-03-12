@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 from werkzeug import create_environ, run_wsgi_app
 
@@ -8,11 +8,11 @@ from lodgeit.application import make_app
 from lodgeit.database import db
 
 # Added config parser
-from ConfigParser import ConfigParser
+from configparser import ConfigParser
 
 config = ConfigParser()
 if not config.read("/etc/lodgeit/lodgeit.conf"):
-    print "Missing /etc/lodgeit/lodgeit.conf configuration"
+    print("Missing /etc/lodgeit/lodgeit.conf configuration")
     exit(0)
 dburi = config.get("root", "dburi")
 SECRET_KEY = config.get("root", "secret_key")
